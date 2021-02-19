@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
 export class AppComponent implements OnInit{
   public employees: Employee[];
   public editEmployee: Employee;
+  public deleteEmployee: Employee;
 
   constructor(private employeeService: EmployeeService) {}
 
@@ -37,9 +38,11 @@ export class AppComponent implements OnInit{
       (response: Employee) => {
         console.log(response);
         this.getEmployees();
+        addForm.reset();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
+        addForm.reset();
       }
     );
   }
@@ -56,6 +59,35 @@ export class AppComponent implements OnInit{
     );
   }
 
+  public onDeleteEmployee(employeeId: number): void {
+    this.employeeService.deleteEmployee(employeeId).subscribe(
+      (response: void) => {
+        console.log(response);
+        this.getEmployees();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public searchEmployees(key: string): void {
+    console.log(key);
+    const results: Employee[] = [];
+    for (const employee of this.employees) {
+      if (employee.name.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || employee.email.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || employee.phone.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || employee.jobTitle.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(employee);
+      }
+    }
+    this.employees = results;
+    if (results.length === 0 || !key) {
+      this.getEmployees();
+    }
+  }
+
   public onOpenModal(employee: Employee, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -70,6 +102,7 @@ export class AppComponent implements OnInit{
       button.setAttribute('data-toggle', '#updateEmployeeModal');
     }
     if (mode === 'delete') {
+      this.deleteEmployee = employee;
       button.setAttribute('data-toggle', '#deleteEmployeeModal');
     }
     container.appendChild(button);
