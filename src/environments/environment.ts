@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8080'
+  // apiBaseUrl: 'http://localhost:8080'
+  apiBaseUrl: 'http://manageemployees-env.eba-gzpmycgk.us-east-2.elasticbeanstalk.com'
 };
 
 /*
