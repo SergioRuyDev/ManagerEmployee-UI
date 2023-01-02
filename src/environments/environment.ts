@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   // apiBaseUrl: 'http://localhost:8080'
-  apiBaseUrl: 'https://ruy-manager-employee.herokuapp.com'
+  apiBaseUrl: 'https://manageremployee-api-production.up.railway.app'
 };
 
 /*
