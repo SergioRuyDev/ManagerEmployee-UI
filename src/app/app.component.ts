@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Employee } from './employee';
+import { Employee } from './model/employee';
 import { EmployeeService } from './employee.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { any } from 'codelyzer/util/function';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,15 @@ import { NgForm } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
   public employees: Employee[];
-  public editEmployee: Employee;
+  public editEmployee: Employee = {
+    id: 0,
+    name: "",
+    email: "",
+    jobTitle: "",
+    phone: "",
+    imageUrl: "",
+    employeeCode: "",
+  };
   public deleteEmployee: Employee;
 
   constructor(private employeeService: EmployeeService){}
@@ -41,7 +50,7 @@ export class AppComponent implements OnInit {
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert(error.error.detail);
         addForm.reset();
       }
     );
@@ -53,20 +62,21 @@ export class AppComponent implements OnInit {
         console.log(response);
         this.getEmployees();
       },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
+      (success: HttpResponse<any>) => {
+        alert(success.statusText);
       }
     );
   }
 
-  public onDeleteEmployee(employeeId: number): void {
-    this.employeeService.deleteEmployee(employeeId).subscribe(
+  public onDeleteEmployee(employeeCode: string): void {
+    this.employeeService.deleteEmployee(employeeCode).subscribe(
       (response: void) => {
         console.log(response);
         this.getEmployees();
       },
-      (error: HttpErrorResponse) => {
-        alert(error.message);
+      (success: HttpResponse<any>) => {
+        alert(success.statusText);
+        this.ngOnInit()
       }
     );
   }
@@ -108,7 +118,5 @@ export class AppComponent implements OnInit {
     container.appendChild(button);
     button.click();
   }
-
-
 
 }
