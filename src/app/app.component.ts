@@ -3,7 +3,6 @@ import { Employee } from './model/employee';
 import { EmployeeService } from './employee.service';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { any } from 'codelyzer/util/function';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit {
         console.log(this.employees);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert(error.error.detail);
       }
     );
   }
@@ -62,8 +61,8 @@ export class AppComponent implements OnInit {
         console.log(response);
         this.getEmployees();
       },
-      (success: HttpResponse<any>) => {
-        alert(success.statusText);
+      (status: HttpResponse<any>) => {
+        alert(status.statusText)
       }
     );
   }
@@ -74,8 +73,7 @@ export class AppComponent implements OnInit {
         console.log(response);
         this.getEmployees();
       },
-      (success: HttpResponse<any>) => {
-        alert(success.statusText);
+      (error: HttpErrorResponse) => {
         this.ngOnInit()
       }
     );
